@@ -1,0 +1,6 @@
+# Pull base image (based on debian:bookworm-slim and postgres 16.3)
+FROM postgres:latest
+
+# Add and seed DB with init.sql
+ADD /init.sql /docker-entrypoint-initdb.d
+RUN chmod a+r /docker-entrypoint-initdb.d/*
