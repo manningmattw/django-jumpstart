@@ -1,0 +1,40 @@
+services:
+  web:
+    container_name: project_name
+    build:
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file:
+      - .env
+    ports:
+      - '8000:8000'
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./:/project_name
+    user: ${UID:-1000}:${GID:-1000}
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    container_name: project_name_postgres
+    build:
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+      context: .
+      dockerfile: Dockerfile-db
+    hostname: localhost
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./.data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    restart: unless-stopped

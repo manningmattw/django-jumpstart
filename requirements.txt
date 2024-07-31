@@ -1,0 +1,7 @@
+Django
+django-extensions
+ipython>=8.26.0
+psycopg2-binary
+pytest-django
+python-dotenv
+requests
