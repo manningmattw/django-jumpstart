@@ -1,4 +1,4 @@
-# Pull base image (based on debian:bookworm-slim and postgres 16.3)
+# Pull base image (based on debian:bookworm-slim and postgres 17)
 FROM postgres:latest
 
 # Add and seed DB with init.sql

@@ -1,5 +1,5 @@
 services:
-  web:
+  app: &app
     container_name: project_name
     build:
       args:

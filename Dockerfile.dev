@@ -22,8 +22,10 @@ WORKDIR /project_name
 
 # Copy project and install dependencies
 COPY . .
+RUN chown -R project_name /project_name
 RUN pip install -r requirements.txt
 
+RUN mkhomedir_helper project_name
 USER project_name
 
 RUN bash -c "cat aliases.sh >> ~/.bashrc"
