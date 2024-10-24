@@ -3,7 +3,7 @@ import secrets
 import string
 
 
-__version__ = "0.0.3"
+__version__ = "0.0.3.1"
 
 
 def generate_secret_key():

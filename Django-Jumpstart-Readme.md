@@ -61,7 +61,7 @@ python django_jumpstart.py
 This will create a `.env` file and add `SECRET_KEY=<random secret key>` to the `.env` file. This also outputs the version of Django Jumpstart used to build this project.
 
 
-**5. Build the development containers**
+**4. Build the development containers**
 
 I use Windows Terminal, which supports tabs, so I dedicate a tab to the container, because it let's me watch the Django manage console output, which is useful in debugging and testing. So, in a new terminal tab/window, navigate to /path/to/repos/project_directory/ and run
 ```
@@ -71,7 +71,7 @@ docker compose up --build --force-recreate
 If the postgres fails when running, and Django manage doesn't start, `CTRL-C` and `docker compose up` again and it should work. Once the services are up, navigate to http://localhost:8000 and you should see a hello world index view. This will prove that the setup is working.
 
 
-**6. Migrate the built-in Django modules and create the superuser account.**
+**5. Migrate the built-in Django modules and create the superuser account.**
 
 There is an example model built, and if you want to use it, you will need to make a migration first. Otherwise, I recommend replacing the example code with your own before doing any migration file creation. Therefore, we need a new terminal window in the /path/to/repos/project_directory location. Then, exec into an interactive web container instance:
 ```
