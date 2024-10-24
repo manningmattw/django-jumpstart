@@ -20,19 +20,23 @@ This repo is always a work in progress. Use this code at your own risk. There ar
 ---
 
 ## Setup
-This setup prefers a development environment using either pure Linux or Windows 11 in WSL2. The containerization tool used in these instructions is Docker but any container service should work. The IDE instructions are based on VSCode. Even if your development setup is different, these instructions should likely work with just a little change in how you might execute each part.
+This setup prefers a development environment using either pure Linux or WSL/WSL2. Note, WSL2 has a few issues in Windows 10, so if you are using Windows 10, consider using WSL. Otherwise Windows 11 WSL2 work like a treat.
+
+The containerization tool used in these instructions is Docker but any other container service, like podman, should work, but its up to you to know the syntax differences.
+
+The IDE instructions are based on VSCode. Even if your development setup is different, these instructions should likely work with just a little change in how you might execute each part.
 
 ### Python Versions:
-This project and the Docker setup is currently built with Python 3.12.4. If you want to install Python 3.12.4 on your system, **make sure that you do not override the system Python version or its `python` alias**. It should be its own Python interpreter called with `python3.12`.
+This project and the Docker setup is currently built with Python 3.13.0. You do not need to have these versions or dependencies installed, as Docker will take care of this. Therefore, Python `venv` instructions are not included here.
 
 
-**1. Clone this repository into a new project directory.**
-
+**1. Create a new repo**
+You can template Django Jumpstart to create a new repository. I recommend this method. After you do so, just `git clone` the new repo and follow the next instructions. If you have a repo, and you want to setup Django for the first time using this repo, you can `git clone` the Django Jumpstart repo directly into the existing repo:
 ```
-mkdir /path/to/repos/project_directory
 cd /path/to/repos/project_directory
 git clone git@github.com:manningmattw/django-jumpstart.git .
 ```
+Then, just follow the next instructions.
 
 
 **2. Update project name and app name and all references**
@@ -48,44 +52,30 @@ I load open VSCode from the project directory with `code .` since I am using WSL
     - from `AppName` to YourCamelCaseAppName
 
 
-**3. Create a virtual environment and install requirements.txt**
+**3. Create a .env file with a generated SECRET_KEY for Django in it**
 
-I keep things simple in VSCode and just point the interpreter to the virtual environment version of Python.
-
-From the project directory:
+Run the following command:
 ```
-python3.12 -m venv /path/to/repos/project_directory/.venv .
-source .venv/bin/activate
-pip install -r requirements.txt
+python django_jumpstart.py
 ```
-
-
-**4. Create a .env file with a generated SECRET_KEY for Django in it**
-
-Paste these lines into the activated virtual environment terminal:
-```
-python -c "
-from django.core.management.utils import get_random_secret_key
-with open('.env', 'w') as f_env:
-    f_env.write(f'SECRET_KEY=\"{get_random_secret_key()}\"\n')"
-```
+This will create a `.env` file and add `SECRET_KEY=<random secret key>` to the `.env` file. This also outputs the version of Django Jumpstart used to build this project.
 
 
 **5. Build the development containers**
 
 I use Windows Terminal, which supports tabs, so I dedicate a tab to the container, because it let's me watch the Django manage console output, which is useful in debugging and testing. So, in a new terminal tab/window, navigate to /path/to/repos/project_directory/ and run
 ```
-docker-compose up --build --force-recreate
+docker compose up --build --force-recreate
 ```
 
-Once the services are up, navigate to http://localhost:8000 and you should see a hello world index view. This will prove that the setup is working.
+If the postgres fails when running, and Django manage doesn't start, `CTRL-C` and `docker compose up` again and it should work. Once the services are up, navigate to http://localhost:8000 and you should see a hello world index view. This will prove that the setup is working.
 
 
 **6. Migrate the built-in Django modules and create the superuser account.**
 
 There is an example model built, and if you want to use it, you will need to make a migration first. Otherwise, I recommend replacing the example code with your own before doing any migration file creation. Therefore, we need a new terminal window in the /path/to/repos/project_directory location. Then, exec into an interactive web container instance:
 ```
-docker-compose exec -it web bash
+docker compose exec -it web bash
 ```
 Now, migrate the current migrations from the built-in Django modules, using the `manage` alias:
 ```
@@ -110,7 +100,7 @@ One of the most powerful ORM testing tools is the Django shell. In the exec web 
 Build and spin up the Docker image and console.
 ```docker-compose up --build```
 
-After pressing `cntl-c` in the Docker console, you should down the image to shutdown the network, too.
+After pressing `CTRL-C` in the Docker console, you should down the image to shutdown the network, too.
 ```docker-compose down```
 
 Load the exec shell for the web container.
